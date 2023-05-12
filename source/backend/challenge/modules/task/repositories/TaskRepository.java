@@ -1,13 +1,19 @@
 package backend.challenge.modules.task.repositories;
 
 import backend.challenge.modules.task.dtos.TaskDTO;
+import backend.challenge.modules.task.enums.TaskStatus;
 import backend.challenge.modules.task.models.Task;
 
 import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Singleton
 public class TaskRepository implements ITaskRepository {
+
+	private static List<Task> tasks = new ArrayList<>();
 
 	@Override
 	public Task index(final Long taskId) {
@@ -25,9 +31,16 @@ public class TaskRepository implements ITaskRepository {
 
 	@Override
 	public Task create(final TaskDTO taskDTO) {
-		// TODO: Criar método responsável por criar uma tarefa
+		Task task = new Task();
+		task.setId(UUID.randomUUID());
+		task.setTitle(taskDTO.getTitle());
+		task.setDescription(taskDTO.getDescription());
+		task.setProgress(0);
+		task.setStatus(TaskStatus.PROGRESS);
+		task.setCreatedAt(new Date());
+		tasks.add(task);
 
-		return null;
+		return task;
 	}
 
 	@Override
