@@ -49,9 +49,11 @@ public class TaskRepository implements ITaskRepository {
 
 	@Override
 	public Task update(final Task task) {
-		// TODO: Criar método responsável por atualizar uma tarefa
+		Task taskToUpdate = this.index(task.getId());
+		taskToUpdate.setTitle(task.getTitle());
+		taskToUpdate.setDescription(task.getDescription());
 
-		return null;
+		return taskToUpdate;
 	}
 
 	@Override

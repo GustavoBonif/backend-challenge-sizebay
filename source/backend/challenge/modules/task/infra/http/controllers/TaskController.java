@@ -16,22 +16,23 @@ public class TaskController {
 
 	private final ICreateTaskService createTaskService;
 	private final IDeleteTaskService deleteTaskService;
+	private final IUpdateTaskService updateTaskService;
 	private final IRetrieveAllTasksService retrieveAllTasksService;
 	private final IRetrieveTaskByIdService retrieveTaskByIdService;
-	private final IUpdateTaskService updateTaskService;
 
 	@Inject
 	public TaskController(
 		final ICreateTaskService createTaskService,
 		final IDeleteTaskService deleteTaskService,
+		final IUpdateTaskService updateTaskService,
 		final IRetrieveAllTasksService retrieveAllTasksService,
 		final IRetrieveTaskByIdService retrieveTaskByIdService
 	) {
 		this.createTaskService = createTaskService;
 		this.deleteTaskService = deleteTaskService;
+		this.updateTaskService = updateTaskService;
 		this.retrieveAllTasksService = retrieveAllTasksService;
 		this.retrieveTaskByIdService = retrieveTaskByIdService;
-		this.updateTaskService = null;
 	}
 
 	@GET
@@ -72,12 +73,15 @@ public class TaskController {
 	@PUT
 	@Path("single/{taskId}")
 	public Response update(@PathParam("taskId") Long taskId, Task task) {
-		/*
-			TODO:  A rota deve alterar apenas o title e description da tarefa
-			 			 que possua o id igual ao id correspondente nos parâmetros da rota.
-		 */
-
-		return DefaultResponse.ok().entity("Hello world");
+		try {
+			Task taskToUpdate = retrieveTaskByIdService.execute(taskId);
+			taskToUpdate.setTitle(task.getTitle());
+			taskToUpdate.setDescription(task.getDescription());
+			Task updatedTask = updateTaskService.execute(taskToUpdate);
+			return DefaultResponse.ok().entity(updatedTask);
+		} catch (Exception e) {
+			return DefaultResponse.badRequest().entity(e.getMessage());
+		}
 	}
 
 	@DELETE
