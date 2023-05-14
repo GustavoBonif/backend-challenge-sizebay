@@ -8,13 +8,12 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Setter
 public class Task {
 
-	private UUID id;
+	private Long id;
 	private String title;
 	private String description;
 	private int progress;

@@ -1,10 +1,12 @@
 package backend.challenge.modules.task.services;
 
+import backend.challenge.modules.task.dtos.TaskDTO;
+import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 import backend.challenge.modules.task.repositories.TaskRepository;
 import kikaha.core.test.KikahaRunner;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -12,6 +14,20 @@ import org.junit.runner.RunWith;
 public class UpdateTaskServiceTest {
 
 	private IUpdateTaskService updateTaskService;
+	private ICreateTaskService createTaskService;
+	private IRetrieveTaskByIdService retrieveTaskByIdService;
+
+	public UpdateTaskServiceTest() {
+	}
+
+	@Before
+	public void init() {
+		final ITaskRepository taskRepository = new TaskRepository();
+
+		this.updateTaskService = new UpdateTaskService(taskRepository);
+		this.createTaskService = new CreateTaskService(taskRepository);
+		this.retrieveTaskByIdService = new RetrieveTaskByIdService(taskRepository);
+	}
 
 	@Test
 	public void shouldBeAbleToUpdateTask() {
@@ -19,6 +35,25 @@ public class UpdateTaskServiceTest {
 			TODO:  Para que esse teste passe, sua aplicação deve permitir que sejam
 		         alterados apenas os campos `title` e `observation`.
 		*/
+
+		boolean wasUpdated = false;
+
+		TaskDTO taskDto = UtilsTest.createTestTaskDTO();
+
+		Task taskToUpdate = createTaskService.execute(taskDto);
+
+		taskToUpdate.setTitle("New title");
+		taskToUpdate.setDescription("New description");
+
+		Task updatedTask = updateTaskService.execute(taskToUpdate);
+
+		if (updatedTask.getId() == taskToUpdate.getId()
+			&& updatedTask.getTitle() == taskToUpdate.getTitle()
+			&& updatedTask.getDescription() == taskToUpdate.getDescription()) {
+			wasUpdated = true;
+		}
+
+		Assert.assertTrue(wasUpdated);
 	}
 
 	@Test

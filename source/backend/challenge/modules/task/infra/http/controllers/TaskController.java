@@ -16,21 +16,23 @@ public class TaskController {
 
 	private final ICreateTaskService createTaskService;
 	private final IDeleteTaskService deleteTaskService;
+	private final IUpdateTaskService updateTaskService;
 	private final IRetrieveAllTasksService retrieveAllTasksService;
 	private final IRetrieveTaskByIdService retrieveTaskByIdService;
-	private final IUpdateTaskService updateTaskService;
 
 	@Inject
 	public TaskController(
 		final ICreateTaskService createTaskService,
 		final IDeleteTaskService deleteTaskService,
-		final IRetrieveAllTasksService retrieveAllTasksService
+		final IUpdateTaskService updateTaskService,
+		final IRetrieveAllTasksService retrieveAllTasksService,
+		final IRetrieveTaskByIdService retrieveTaskByIdService
 	) {
 		this.createTaskService = createTaskService;
 		this.deleteTaskService = deleteTaskService;
+		this.updateTaskService = updateTaskService;
 		this.retrieveAllTasksService = retrieveAllTasksService;
-		this.retrieveTaskByIdService = null;
-		this.updateTaskService = null;
+		this.retrieveTaskByIdService = retrieveTaskByIdService;
 	}
 
 	@GET
@@ -46,9 +48,13 @@ public class TaskController {
 	@GET
 	@Path("single/{taskId}")
 	public Response index(@PathParam("taskId") Long taskId) {
-		// TODO: A rota deve retornar somente a tarefa a qual o id corresponder
-
-		return DefaultResponse.ok().entity("Hello world");
+		try {
+			Task requestedTask = retrieveTaskByIdService.execute(taskId);
+			return DefaultResponse.ok().entity(requestedTask);
+		}
+		catch (Exception e) {
+			return DefaultResponse.badRequest().entity(e.getMessage());
+		}
 	}
 
 	@POST
@@ -67,12 +73,15 @@ public class TaskController {
 	@PUT
 	@Path("single/{taskId}")
 	public Response update(@PathParam("taskId") Long taskId, Task task) {
-		/*
-			TODO:  A rota deve alterar apenas o title e description da tarefa
-			 			 que possua o id igual ao id correspondente nos parâmetros da rota.
-		 */
-
-		return DefaultResponse.ok().entity("Hello world");
+		try {
+			Task taskToUpdate = retrieveTaskByIdService.execute(taskId);
+			taskToUpdate.setTitle(task.getTitle());
+			taskToUpdate.setDescription(task.getDescription());
+			Task updatedTask = updateTaskService.execute(taskToUpdate);
+			return DefaultResponse.ok().entity(updatedTask);
+		} catch (Exception e) {
+			return DefaultResponse.badRequest().entity(e.getMessage());
+		}
 	}
 
 	@DELETE
