@@ -17,8 +17,12 @@ public class TaskRepository implements ITaskRepository {
 
 	@Override
 	public Task index(final Long taskId) {
-		// TODO: Criar método responsável por retornar tarefa por id
 
+		for (Task task : tasks) {
+			if (task.getId().equals(taskId)) {
+				return task;
+			}
+		}
 		return null;
 	}
 
@@ -32,7 +36,7 @@ public class TaskRepository implements ITaskRepository {
 	@Override
 	public Task create(final TaskDTO taskDTO) {
 		Task task = new Task();
-		task.setId(UUID.randomUUID());
+		task.setId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
 		task.setTitle(taskDTO.getTitle());
 		task.setDescription(taskDTO.getDescription());
 		task.setProgress(0);

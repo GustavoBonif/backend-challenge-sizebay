@@ -24,12 +24,13 @@ public class TaskController {
 	public TaskController(
 		final ICreateTaskService createTaskService,
 		final IDeleteTaskService deleteTaskService,
-		final IRetrieveAllTasksService retrieveAllTasksService
+		final IRetrieveAllTasksService retrieveAllTasksService,
+		final IRetrieveTaskByIdService retrieveTaskByIdService
 	) {
 		this.createTaskService = createTaskService;
 		this.deleteTaskService = deleteTaskService;
 		this.retrieveAllTasksService = retrieveAllTasksService;
-		this.retrieveTaskByIdService = null;
+		this.retrieveTaskByIdService = retrieveTaskByIdService;
 		this.updateTaskService = null;
 	}
 
@@ -46,9 +47,13 @@ public class TaskController {
 	@GET
 	@Path("single/{taskId}")
 	public Response index(@PathParam("taskId") Long taskId) {
-		// TODO: A rota deve retornar somente a tarefa a qual o id corresponder
-
-		return DefaultResponse.ok().entity("Hello world");
+		try {
+			Task requestedTask = retrieveTaskByIdService.execute(taskId);
+			return DefaultResponse.ok().entity(requestedTask);
+		}
+		catch (Exception e) {
+			return DefaultResponse.badRequest().entity(e.getMessage());
+		}
 	}
 
 	@POST
