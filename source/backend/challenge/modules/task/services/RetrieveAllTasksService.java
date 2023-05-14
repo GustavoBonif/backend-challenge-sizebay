@@ -19,9 +19,9 @@ public class RetrieveAllTasksService implements IRetrieveAllTasksService {
 
 	@Override
 	public List<Task> execute() {
-		// TODO: Criar serviço responsável por recuperar todas as tarefas
+		List<Task> allTasks = this.taskRepository.show();
 
-		return null;
+		return allTasks;
 	}
 
 }

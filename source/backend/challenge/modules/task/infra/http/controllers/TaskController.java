@@ -8,6 +8,7 @@ import kikaha.urouting.api.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 
 @Singleton
 @Path("tasks")
@@ -34,9 +35,12 @@ public class TaskController {
 
 	@GET
 	public Response show() {
-		// TODO: Rota que lista todas as tarefas
-
-		return DefaultResponse.ok().entity("Hello world");
+		try {
+			List<Task> allTasks = retrieveAllTasksService.execute();
+			return DefaultResponse.ok().entity(allTasks);
+		} catch (Exception e) {
+			return DefaultResponse.badRequest().entity(e.getMessage());
+		}
 	}
 
 	@GET
