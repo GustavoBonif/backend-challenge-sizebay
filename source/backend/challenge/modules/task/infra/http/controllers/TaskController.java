@@ -87,9 +87,13 @@ public class TaskController {
 	@DELETE
 	@Path("single/{taskId}")
 	public Response delete(@PathParam("taskId") Long taskId) {
-		// TODO: A rota deve deletar a tarefa com o id correspondente nos parâmetros da rota
-
-		return DefaultResponse.ok().entity("Hello world");
+		try {
+			Task taskToBeDeleted = retrieveTaskByIdService.execute(taskId);
+			deleteTaskService.execute(taskToBeDeleted.getId());
+			return DefaultResponse.ok().entity("Task deleted!");
+		} catch (Exception e) {
+			return DefaultResponse.badRequest().entity(e.getMessage());
+		}
 	}
 
 }

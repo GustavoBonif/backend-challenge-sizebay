@@ -58,8 +58,8 @@ public class TaskRepository implements ITaskRepository {
 
 	@Override
 	public void delete(final Long taskId) {
- 		// TODO: Criar método responsável por deletar tarefa por id
-
+		Task taskToBeDeleted = this.index(taskId);
+		tasks.remove(taskToBeDeleted);
 	}
 
 }
