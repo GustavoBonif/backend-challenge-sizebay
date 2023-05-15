@@ -1,6 +1,7 @@
 package backend.challenge.modules.task.repositories;
 
 import backend.challenge.modules.task.dtos.TaskDTO;
+import backend.challenge.modules.task.dtos.TaskProgressDTO;
 import backend.challenge.modules.task.enums.TaskStatus;
 import backend.challenge.modules.task.models.Task;
 
@@ -60,6 +61,24 @@ public class TaskRepository implements ITaskRepository {
 	public void delete(final Long taskId) {
 		Task taskToBeDeleted = this.index(taskId);
 		tasks.remove(taskToBeDeleted);
+	}
+
+	@Override
+	public Task updateProgress(TaskProgressDTO taskProgressDTO) {
+		Task taskToUpdate = this.index(taskProgressDTO.getId());
+
+		taskToUpdate.setProgress(taskProgressDTO.getProgress());
+
+		return taskToUpdate;
+	}
+
+	@Override
+	public Task updateStatus(TaskProgressDTO taskProgressDTO) {
+		Task taskToUpdate = this.index(taskProgressDTO.getId());
+
+		taskToUpdate.setStatus(TaskStatus.COMPLETE);
+
+		return taskToUpdate;
 	}
 
 }

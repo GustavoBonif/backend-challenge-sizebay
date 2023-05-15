@@ -31,11 +31,6 @@ public class UpdateTaskServiceTest {
 
 	@Test
 	public void shouldBeAbleToUpdateTask() {
-		/*
-			TODO:  Para que esse teste passe, sua aplicação deve permitir que sejam
-		         alterados apenas os campos `title` e `observation`.
-		*/
-
 		boolean wasUpdated = false;
 
 		TaskDTO taskDto = UtilsTest.createTestTaskDTO();
