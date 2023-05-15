@@ -14,6 +14,7 @@ import java.util.List;
 @Path("tasks")
 public class TaskController {
 
+	private final String task_not_found_alert = "Task not found!";
 	private final ICreateTaskService createTaskService;
 	private final IDeleteTaskService deleteTaskService;
 	private final IUpdateTaskService updateTaskService;
@@ -50,6 +51,11 @@ public class TaskController {
 	public Response index(@PathParam("taskId") Long taskId) {
 		try {
 			Task requestedTask = retrieveTaskByIdService.execute(taskId);
+
+			if (requestedTask == null) {
+				return DefaultResponse.ok().entity(task_not_found_alert);
+			}
+
 			return DefaultResponse.ok().entity(requestedTask);
 		}
 		catch (Exception e) {
@@ -75,6 +81,11 @@ public class TaskController {
 	public Response update(@PathParam("taskId") Long taskId, Task task) {
 		try {
 			Task taskToUpdate = retrieveTaskByIdService.execute(taskId);
+
+			if (taskToUpdate == null) {
+				return DefaultResponse.ok().entity(task_not_found_alert);
+			}
+
 			taskToUpdate.setTitle(task.getTitle());
 			taskToUpdate.setDescription(task.getDescription());
 			Task updatedTask = updateTaskService.execute(taskToUpdate);
@@ -87,9 +98,18 @@ public class TaskController {
 	@DELETE
 	@Path("single/{taskId}")
 	public Response delete(@PathParam("taskId") Long taskId) {
-		// TODO: A rota deve deletar a tarefa com o id correspondente nos parâmetros da rota
+		try {
+			Task taskToBeDeleted = retrieveTaskByIdService.execute(taskId);
 
-		return DefaultResponse.ok().entity("Hello world");
+			if (taskToBeDeleted == null) {
+				return DefaultResponse.ok().entity(task_not_found_alert);
+			}
+
+			deleteTaskService.execute(taskToBeDeleted.getId());
+			return DefaultResponse.ok().entity("Task deleted!");
+		} catch (Exception e) {
+			return DefaultResponse.badRequest().entity(e.getMessage());
+		}
 	}
 
 }

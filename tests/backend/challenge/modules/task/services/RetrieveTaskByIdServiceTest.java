@@ -39,7 +39,6 @@ public class RetrieveTaskByIdServiceTest {
 		}
 
 		Assert.assertTrue(isTheRequiredTask);
-
 	}
 
 }

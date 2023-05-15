@@ -1,6 +1,7 @@
 package backend.challenge.modules.task.services;
 
 import backend.challenge.modules.task.dtos.TaskDTO;
+import backend.challenge.modules.task.dtos.TaskProgressDTO;
 
 public class UtilsTest {
     public static TaskDTO createTestTaskDTO() {
@@ -10,5 +11,13 @@ public class UtilsTest {
         taskDto.setDescription("description test");
 
         return taskDto;
+    }
+
+    public static TaskProgressDTO  createTaskProgressDTO(Long taskId) {
+        TaskProgressDTO taskProgressDTO = TaskProgressDTO.create();
+        taskProgressDTO.setId(taskId);
+        taskProgressDTO.setProgress(75);
+
+        return taskProgressDTO;
     }
 }
