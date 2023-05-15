@@ -24,11 +24,6 @@ public class CreateTaskServiceTest {
 
 	@Test
 	public void shouldBeAbleToCreateANewTask() {
-		// TODO:  Para que esse teste passe, sua aplicação deve permitir que
-		//  uma tarefa seja criado, e retorne um json com a tarefa criada.
-
-		// Realizado, testado apenas teste isolado
-
 		TaskDTO taskDto = UtilsTest.createTestTaskDTO();
 
 		Task taskTest = createTaskService.execute(taskDto);

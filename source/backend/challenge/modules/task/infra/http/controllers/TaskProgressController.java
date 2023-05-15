@@ -48,12 +48,13 @@ public class TaskProgressController {
 			taskProgressDTO.setProgress(taskProgressView.getProgress());
 			taskProgressDTO.setId(taskId);
 
-			if (taskProgressDTO.getProgress() == 100) {
-				this.updateStatus(taskProgressDTO);
-			}
-
+			Task taskToBeUpdated = retrieveTaskByIdService.execute(taskId);
 
 			taskToUpdate = updateTaskProgressService.execute(taskProgressDTO);
+
+			if (taskProgressDTO.getProgress() == 100) {
+				this.updateStatus(taskToBeUpdated);
+			}
 
 			return DefaultResponse.ok().entity(taskToUpdate);
 		} catch (Exception e) {
@@ -61,8 +62,8 @@ public class TaskProgressController {
 		}
 	}
 
-	private void updateStatus(TaskProgressDTO taskProgressDTO) {
-		this.updateTaskStatusService.execute(taskProgressDTO);
+	private void updateStatus(Task task) {
+		this.updateTaskStatusService.execute(task);
 	}
 
 }

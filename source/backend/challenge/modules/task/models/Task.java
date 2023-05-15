@@ -20,4 +20,20 @@ public class Task {
 	private TaskStatus status;
 	private Date createdAt;
 
+	// Sobreescrevendo setter de status para verificação de progresso antes da mudança
+	public void setStatus(TaskStatus status) {
+		if (this.getProgress() == 100) {
+			this.status = status;
+		} else {
+			this.status = TaskStatus.PROGRESS;
+		}
+	}
+
+	public void setProgress(int progress) {
+		if (progress >= 1 &&
+			progress <= 100)
+		{
+			this.progress = progress;
+		}
+	}
 }

@@ -1,6 +1,5 @@
 package backend.challenge.modules.task.services;
 
-import backend.challenge.modules.task.dtos.TaskProgressDTO;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 
@@ -17,8 +16,8 @@ public class UpdateTaskStatus implements IUpdateTaskStatusService{
     }
 
     @Override
-    public Task execute(TaskProgressDTO taskProgressDTO) {
-        Task taskUpdated = this.taskRepository.updateStatus(taskProgressDTO);
+    public Task execute(Task task) {
+        Task taskUpdated = this.taskRepository.updateStatus(task);
         return taskUpdated;
     }
 }

@@ -5,5 +5,5 @@ import backend.challenge.modules.task.models.Task;
 
 public interface IUpdateTaskStatusService {
 
-    Task execute(TaskProgressDTO taskProgressDTO);
+    Task execute(Task task);
 }

@@ -73,8 +73,8 @@ public class TaskRepository implements ITaskRepository {
 	}
 
 	@Override
-	public Task updateStatus(TaskProgressDTO taskProgressDTO) {
-		Task taskToUpdate = this.index(taskProgressDTO.getId());
+	public Task updateStatus(Task task) {
+		Task taskToUpdate = this.index(task.getId());
 
 		taskToUpdate.setStatus(TaskStatus.COMPLETE);
 

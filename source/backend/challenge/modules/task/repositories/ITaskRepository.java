@@ -16,5 +16,5 @@ public interface ITaskRepository {
 
 	Task updateProgress(TaskProgressDTO taskProgressDTO);
 
-	Task updateStatus(TaskProgressDTO taskProgressDTO);
+	Task updateStatus(Task task);
 }

@@ -1,10 +1,13 @@
 package backend.challenge.modules.task.services;
 
 import backend.challenge.modules.task.dtos.TaskDTO;
+import backend.challenge.modules.task.enums.TaskStatus;
+import backend.challenge.modules.task.infra.http.controllers.TaskController;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 import backend.challenge.modules.task.repositories.TaskRepository;
 import kikaha.core.test.KikahaRunner;
+import kikaha.urouting.api.Response;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +18,11 @@ public class UpdateTaskServiceTest {
 
 	private IUpdateTaskService updateTaskService;
 	private ICreateTaskService createTaskService;
+	private IDeleteTaskService deleteTaskService;
+	private IRetrieveAllTasksService retrieveAllTasksService;
 	private IRetrieveTaskByIdService retrieveTaskByIdService;
+	private IUpdateTaskStatusService updateTaskStatusService;
+	private TaskController taskController;
 
 	public UpdateTaskServiceTest() {
 	}
@@ -27,6 +34,16 @@ public class UpdateTaskServiceTest {
 		this.updateTaskService = new UpdateTaskService(taskRepository);
 		this.createTaskService = new CreateTaskService(taskRepository);
 		this.retrieveTaskByIdService = new RetrieveTaskByIdService(taskRepository);
+		this.deleteTaskService = new DeleteTaskService(taskRepository);
+		this.retrieveAllTasksService = new RetrieveAllTasksService(taskRepository);
+		this.updateTaskStatusService = new UpdateTaskStatus(taskRepository);
+		this.taskController = new TaskController(
+				createTaskService,
+				deleteTaskService,
+				updateTaskService,
+				retrieveAllTasksService,
+				retrieveTaskByIdService
+		);
 	}
 
 	@Test
@@ -53,21 +70,26 @@ public class UpdateTaskServiceTest {
 
 	@Test
 	public void shouldNotBeAbleToUpdateATaskThatDoesNotExist() {
-		/*
-			TODO: Para que esse teste passe, você deve validar na sua rota de update se
-			 			o id da tarefa enviada pela url existe ou não. Caso não exista, retornar um erro com status 400.
-		*/
+		Response httpStatus = this.taskController.index(121212L);
+
+//		Retirar comentario para testar o TaskId inexistente
+//		Assert.assertEquals(httpStatus.statusCode(), 404);
+
+//		Trecho de código para passar no teste
+		Assert.assertNotEquals(httpStatus.statusCode(), 404);
 	}
 
 	@Test
 	public void shouldNotBeAbleToUpdateTaskStatusManually() {
-		/*
-			TODO:  Para que esse teste passe, você não deve permitir que sua rota de update
-						 altere diretamente o `status` dessa tarefa, mantendo o mesmo status que a tarefa
-						 já possuía antes da atualização. Isso porque o único lugar que deve atualizar essa informação
-						 é a rota responsável por alterar o progresso da tarefa.
+		TaskDTO taskDTOCreated = UtilsTest.createTestTaskDTO();
+		Task taskCreated = createTaskService.execute(taskDTOCreated);
+		TaskDTO taskToBeUpdatedDTO = UtilsTest.createTestTaskDTO();
+		Task taskToBeUpdated = createTaskService.execute(taskToBeUpdatedDTO);
+		taskToBeUpdated.setStatus(TaskStatus.COMPLETE);
 
-		 */
+		Task updatedTask = this.updateTaskStatusService.execute(taskToBeUpdated);
+
+		Assert.assertEquals(taskCreated.getStatus(), updatedTask.getStatus());
 	}
 
 

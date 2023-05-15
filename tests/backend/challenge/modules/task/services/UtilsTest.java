@@ -13,7 +13,7 @@ public class UtilsTest {
         return taskDto;
     }
 
-    public static TaskProgressDTO  updateTaskProgressDTO(Long taskId) {
+    public static TaskProgressDTO  createTaskProgressDTO(Long taskId) {
         TaskProgressDTO taskProgressDTO = TaskProgressDTO.create();
         taskProgressDTO.setId(taskId);
         taskProgressDTO.setProgress(75);
