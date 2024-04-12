@@ -15,6 +15,7 @@ import java.util.List;
 public class TaskController {
 
 	private final String task_not_found_alert = "Task not found!";
+	private final String title_empty_alert = "Title is required!";
 	private final ICreateTaskService createTaskService;
 	private final IDeleteTaskService deleteTaskService;
 	private final IUpdateTaskService updateTaskService;
@@ -66,6 +67,11 @@ public class TaskController {
 	@POST
 	public Response create(TaskView task) {
 		try {
+
+			if (task.getTitle() == null) {
+				throw new RuntimeException(title_empty_alert);
+			}
+
 			TaskDTO taskDto = TaskDTO.create();
 			taskDto.setTitle(task.getTitle());
 			taskDto.setDescription(task.getDescription());

@@ -18,6 +18,9 @@ public class RetrieveTaskByIdService implements IRetrieveTaskByIdService {
 
     @Override
     public Task execute(Long taskId) {
+        if (taskId == null) {
+            return null;
+        }
         Task requestedTask = this.taskRepository.index(taskId);
 
         return requestedTask;
