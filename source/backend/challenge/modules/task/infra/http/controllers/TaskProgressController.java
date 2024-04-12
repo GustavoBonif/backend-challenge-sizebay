@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 public class TaskProgressController {
 
 	private final String task_not_found_alert = "Task not found!";
+	private final String progress_out_of_range_alert = "The progress must be in a 0 - 100 range!";
 	private final IUpdateTaskProgressService updateTaskProgressService;
 	private final IRetrieveTaskByIdService retrieveTaskByIdService;
 	private final IUpdateTaskStatusService updateTaskStatusService;
@@ -41,7 +42,7 @@ public class TaskProgressController {
 
 			if (taskProgressView.getProgress() < 1 ||
 				taskProgressView.getProgress() > 100 ){
-				return DefaultResponse.ok().entity("The progress must be in a 0 - 100 range!");
+				return DefaultResponse.ok().entity(progress_out_of_range_alert);
 			}
 
 			TaskProgressDTO taskProgressDTO = TaskProgressDTO.create();
